@@ -1,0 +1,6 @@
+mode=split
+kernel=Image-ui006.gz
+initrd=initrd-ui007.gz
+dtb=dtb-ui006
+abi=linux-aarch64
+cmdline=androidboot.hardware=qcom androidboot.selinux=permissive selinux=0 user_debug=31 lpm_levels.sleep_disabled=1 boot_cpus=0-5 loop.max_part=7 coherent_pool=2M swiotlb=2048 xploader.rootfs=/postmarketos/rootfs-ui007.img

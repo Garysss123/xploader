@@ -1,0 +1,7 @@
+build/
+__pycache__/
+*.pyc
+*.img
+*.cpio*
+*.log
+!docs/images/*.png

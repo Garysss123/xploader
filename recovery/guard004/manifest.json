@@ -1,0 +1,22 @@
+{
+  "variant": "guard004",
+  "scope": "Optional recovery for the tested E6653 split29/44 layout; SD read-only; no ROM registration",
+  "upstream_repository": "https://github.com/Sony-MSM8994-Dev/android_kernel_sony_msm8994",
+  "upstream_commit": "ced7acdc4d1bf7af8343b2aa715a1770cca961c1",
+  "original_twrp_url": "https://github.com/Sony-MSM8994-Dev/OTA/releases/download/archives/twrp-3.7.0_9-0-sumire.img",
+  "original_twrp_sha256": "ef71a7abb84a5d0490610adb97f83316d59e2d62d9f4124bca2f6b9376912cae",
+  "kernel_raw_sha256": "24cc848b2e15a810d7abf12622d51f21160705b0f2c79d893db3b1e403b357d1",
+  "kernel_raw_bytes": 24511648,
+  "kernel_gzip_sha256": "90b975091dbd6e9f38f3646813493a31c507e0725e9eccec2fd3d070f16de450",
+  "lab_recovery_sha256": "fddb02b1cc99b254b2741c80300208a828b8fc7cfa27a5a16a2b2b158d35ed16",
+  "compiled_guard_hardware_verified": true,
+  "destructive_SD_format_hardware_tested": false,
+  "overlay_sha256": {
+    "block/blk-core.c": "79e66306128dea38560bafadacf74e364d14cbfa71aba721882564f540ce6b13",
+    "drivers/mmc/card/block.c": "a60c711dce03b1f607f126b58cfee8942e0e9ea05072807bd3ba43183889bc3e",
+    "drivers/mmc/card/Kconfig": "f552ed373a8850b007654277556c5d373f958c7432a747a99d8b385c20498e2d",
+    "include/linux/xploader_guard.h": "3b0b211c1dec77ff44df436df0d8a01a9b8f685629b5f5526131d258af192a94"
+  },
+  "kernel_config_sha256": "c772fab98b158e313a5e3ad102fd1e70232c35b34c42aaca389541de4d64c679",
+  "licensed_component": "GPL-2.0 Linux recovery kernel; retain upstream per-file notices; host packaging script MIT"
+}

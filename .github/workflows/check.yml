@@ -1,0 +1,12 @@
+name: Native core
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  build-and-check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y gcc-aarch64-linux-gnu
+      - run: bash tools/build.sh
+      - run: bash tools/check.sh

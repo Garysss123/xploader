@@ -1,0 +1,3 @@
+mode=bootimg
+kernel=boot.img
+abi=linux-aarch64

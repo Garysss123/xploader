@@ -1,0 +1,18 @@
+{
+  "source": {
+    "repo": "https://github.com/notofonts/noto-cjk",
+    "tag": "Sans2.004",
+    "commit": "523d033d6cb47f4a80c58a35753646f5c3608a78",
+    "font_url": "https://raw.githubusercontent.com/notofonts/noto-cjk/523d033d6cb47f4a80c58a35753646f5c3608a78/Sans/Variable/TTF/Subset/NotoSansTC-VF.ttf",
+    "font_sha256": "ac091cc8cd19e848202afc8fe6d3809b4526c8fdbdb4be82da20c4f785949591",
+    "font_bytes": 11942800,
+    "license_url": "https://raw.githubusercontent.com/notofonts/noto-cjk/523d033d6cb47f4a80c58a35753646f5c3608a78/LICENSE",
+    "license_sha256": "6a73f9541c2de74158c0e7cf6b0a58ef774f5a780bf191f2d7ec9cc53efe2bf2",
+    "scope": "Bitmap subsets for native menu messages; existing MAGLDR-style ASCII font retained"
+  },
+  "catalog_glyph_count": 144,
+  "bitmap_height": 24,
+  "bitmap_glyph_bytes": 100,
+  "generator": "tools/generate_menu_locales.py",
+  "generated_sha256": "0381b28f1769e69c509e6672e8939ac4ce4357a9f4c73deb0c5d6c438aa154a3"
+}

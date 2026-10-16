@@ -1,0 +1,262 @@
+[
+  {
+    "file": "lineageos19-home.png",
+    "kind": "physical_device_screenshot",
+    "system": "LineageOS 19.1 / Android 12",
+    "device": "Sony Xperia Z5 E6653",
+    "sha256": "b17d4f4b2823d2f519e4683643429ee2be21de2c4909beeaa551c5fc94e5bb9a",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "pixel_content_modified": false,
+    "notes": "Actual E6653 SD boot; version and selected /lineageos19 verified through root ADB on the capture boot."
+  },
+  {
+    "file": "lineageos19-about.png",
+    "kind": "physical_device_screenshot",
+    "system": "LineageOS 19.1 / Android 12",
+    "device": "Sony Xperia Z5 E6653",
+    "sha256": "6a3f7a64840d8d97f4c7a2485173a2990fab888a108c660d9f25dede3342788e",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "pixel_content_modified": false,
+    "notes": "Actual Settings About phone page; the top page shows the model, not the version field. OS version was independently read through ADB."
+  },
+  {
+    "file": "postmarketos-desktop.png",
+    "kind": "physical_device_screenshot",
+    "system": "postmarketOS v25.12 / Xfce",
+    "device": "Sony Xperia Z5 E6653",
+    "sha256": "44c261734a108bb37c3f332758873ea278d789b8dea1b0a22002f73b99f23dc2",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "pixel_content_modified": false,
+    "notes": "Actual E6653 framebuffer capture after repeat SD boot. Window extends past the screen edge as captured; physical touch was separately user-confirmed."
+  },
+  {
+    "file": "sailfishos-apps.png",
+    "kind": "physical_device_screenshot",
+    "system": "Sailfish OS 4.6.0.13",
+    "device": "Sony Xperia Z5 E6653",
+    "sha256": "8890929e94f28af39348bc65046f498746d07322c0d4941438bcaa50e80676a6",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "pixel_content_modified": false,
+    "notes": "Original Lipstick screenshot from the physical E6653. App icons do not imply their hardware services work."
+  },
+  {
+    "file": "sailfishos-terminal.png",
+    "kind": "physical_device_screenshot",
+    "system": "Sailfish OS 4.6.0.13",
+    "device": "Sony Xperia Z5 E6653",
+    "sha256": "78b3142c2215bc63e5fcd3bddcfbed8286f158b134ca162d0f54265d2595e3d8",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "pixel_content_modified": false,
+    "notes": "Original Fingerterm About page captured by Lipstick on the physical E6653."
+  },
+  {
+    "file": "loading-1.png",
+    "kind": "host_renderer_preview",
+    "revision": "native-menu-074",
+    "renderer": "src/menu/xpl_framebuffer.c",
+    "sha256": "44c308796a2089647c54874e45cf2a40b8bd999e4fdb618c5e299de7c76eeb48",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "physical_device_screenshot": false,
+    "notes": "Actual frozen renderer with representative menu state; not a hardware capture."
+  },
+  {
+    "file": "loading-2.png",
+    "kind": "host_renderer_preview",
+    "revision": "native-menu-074",
+    "renderer": "src/menu/xpl_framebuffer.c",
+    "sha256": "fcc41a71b1221b7525c3d0aff947e0dc66352decce8866673716a10edd945a89",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "physical_device_screenshot": false,
+    "notes": "Actual frozen renderer with representative menu state; not a hardware capture."
+  },
+  {
+    "file": "loading-3.png",
+    "kind": "host_renderer_preview",
+    "revision": "native-menu-074",
+    "renderer": "src/menu/xpl_framebuffer.c",
+    "sha256": "508d22baa9fde3afe6a921d23612e1c04e8dc907c60b51cb294a6d4309974d05",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "physical_device_screenshot": false,
+    "notes": "Actual frozen renderer with representative menu state; not a hardware capture."
+  },
+  {
+    "file": "loading-go.png",
+    "kind": "host_renderer_preview",
+    "revision": "native-menu-074",
+    "renderer": "src/menu/xpl_framebuffer.c",
+    "sha256": "cdc4bdad9b773fddda7717a3843000bfc89162f50dffd154589474627e40da97",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "physical_device_screenshot": false,
+    "notes": "Actual frozen renderer with representative menu state; not a hardware capture."
+  },
+  {
+    "file": "menu-boot-once.png",
+    "kind": "host_renderer_preview",
+    "revision": "native-menu-074",
+    "renderer": "src/menu/xpl_framebuffer.c",
+    "sha256": "168a00282ea07076e95e78a60265fee6081035513bbfe84eb4e49f9ebc71a61e",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "physical_device_screenshot": false,
+    "notes": "Actual frozen renderer with representative menu state; not a hardware capture."
+  },
+  {
+    "file": "menu-boot-settings.png",
+    "kind": "host_renderer_preview",
+    "revision": "native-menu-074",
+    "renderer": "src/menu/xpl_framebuffer.c",
+    "sha256": "de5892528244afd2d476473bb935415cd0079e5050b43076f424ece2d155b156",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "physical_device_screenshot": false,
+    "notes": "Actual frozen renderer with representative menu state; not a hardware capture."
+  },
+  {
+    "file": "menu-error.png",
+    "kind": "host_renderer_preview",
+    "revision": "native-menu-074",
+    "renderer": "src/menu/xpl_framebuffer.c",
+    "sha256": "8dc2347f7cb4e508e835cee499312d217c43e4536796e861db6c3931fecd5449",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "physical_device_screenshot": false,
+    "notes": "Actual frozen renderer with representative menu state; not a hardware capture."
+  },
+  {
+    "file": "menu-main.png",
+    "kind": "host_renderer_preview",
+    "revision": "native-menu-074",
+    "renderer": "src/menu/xpl_framebuffer.c",
+    "sha256": "a8e7459fc883453b5cf0827186c43811a66306c29a216d2f46a4391a3d560129",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "physical_device_screenshot": false,
+    "notes": "Actual frozen renderer with representative menu state; not a hardware capture."
+  },
+  {
+    "file": "menu-pc-sd.png",
+    "kind": "host_renderer_preview",
+    "revision": "native-menu-074",
+    "renderer": "src/menu/xpl_framebuffer.c",
+    "sha256": "59ba604738faec27d6980d08cf630732aae925e3aeb0d0e2d95f1052c886fc0c",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "physical_device_screenshot": false,
+    "notes": "Actual frozen renderer with representative menu state; not a hardware capture."
+  },
+  {
+    "file": "menu-quickboot.png",
+    "kind": "host_renderer_preview",
+    "revision": "native-menu-074",
+    "renderer": "src/menu/xpl_framebuffer.c",
+    "sha256": "596ab71ba501cb3dabdc3f723385bf7aca94a0b2ae5c65be87bdeb10b5349ae0",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "physical_device_screenshot": false,
+    "notes": "Actual frozen renderer with representative menu state; not a hardware capture."
+  },
+  {
+    "file": "menu-rescue.png",
+    "kind": "host_renderer_preview",
+    "revision": "native-menu-074",
+    "renderer": "src/menu/xpl_framebuffer.c",
+    "sha256": "da03ab55263ba905f8a29d690254a7120c6c0539435c8703e7c36d9f74b64005",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "physical_device_screenshot": false,
+    "notes": "Actual frozen renderer with representative menu state; not a hardware capture."
+  },
+  {
+    "file": "menu-reset-settings.png",
+    "kind": "host_renderer_preview",
+    "revision": "native-menu-074",
+    "renderer": "src/menu/xpl_framebuffer.c",
+    "sha256": "d1efa1b675f7681ec4958d145746bae099f12b00d17b1f2b2d270fa0074aa4dd",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "physical_device_screenshot": false,
+    "notes": "Actual frozen renderer with representative menu state; not a hardware capture."
+  },
+  {
+    "file": "menu-sd-directory.png",
+    "kind": "host_renderer_preview",
+    "revision": "native-menu-074",
+    "renderer": "src/menu/xpl_framebuffer.c",
+    "sha256": "4da004f7f780fe76adfa16c13f0a020438aec2ffbaba871ac2159e68552c274e",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "physical_device_screenshot": false,
+    "notes": "Actual frozen renderer with representative menu state; not a hardware capture."
+  },
+  {
+    "file": "menu-service.png",
+    "kind": "host_renderer_preview",
+    "revision": "native-menu-074",
+    "renderer": "src/menu/xpl_framebuffer.c",
+    "sha256": "2716ad48cfe1a9e855d8d91751ff31eb02591b559dc02218bef48f1b2a85e76d",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "physical_device_screenshot": false,
+    "notes": "Actual frozen renderer with representative menu state; not a hardware capture."
+  },
+  {
+    "file": "menu-tools.png",
+    "kind": "host_renderer_preview",
+    "revision": "native-menu-074",
+    "renderer": "src/menu/xpl_framebuffer.c",
+    "sha256": "79a7c9e9324a855d5426cd6517c5d4c05ab7493660ebc9422ceaba6801a8df36",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "physical_device_screenshot": false,
+    "notes": "Actual frozen renderer with representative menu state; not a hardware capture."
+  }
+]

@@ -1,0 +1,14 @@
+* text=auto
+*.sh text eol=lf
+*.c text eol=lf
+*.h text eol=lf
+*.S text eol=lf
+*.py text eol=lf
+*.png binary
+*.bin binary
+src/** -text
+config/native_menu_config.h -text
+recovery/guard004/overlay/** -text
+recovery/guard004/kernel.config -text
+recovery/guard004/recovery.fstab -text
+*.cmd text eol=crlf

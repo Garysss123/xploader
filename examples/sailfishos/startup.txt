@@ -1,0 +1,6 @@
+mode=split
+kernel=Image-sf007.gz
+initrd=initrd-native144.gz
+dtb=dtb-z5-lab001
+abi=linux-aarch64
+cmdline=androidboot.hardware=qcom androidboot.selinux=permissive selinux=0 user_debug=31 lpm_levels.sleep_disabled=0 boot_cpus=0-3 loop.max_part=7 coherent_pool=2M swiotlb=2048 systemd.unit=xploader-sailfish-ui032.target systemd.unified_cgroup_hierarchy=0 systemd.log_target=kmsg
