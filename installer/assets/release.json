@@ -1,0 +1,29 @@
+{
+  "release": "v1.0",
+  "platform_tools": {
+    "url": "https://dl.google.com/android/repository/platform-tools_r37.0.1-win.zip",
+    "bytes": 8044989,
+    "sha256": "45f4d63113e895ebde0c90f194099a4676b6ac653bd28d54314a9e022bbc1a99"
+  },
+  "model": "E6653",
+  "package_id": "975b7a36a8ae5b4ac6776f342f9ab7dd2818073afeec17210f1f0741d05d3132",
+  "carrier_marker": "native-menu-076-owned-entryguard002",
+  "manager": {
+    "file": "xploader.img",
+    "bytes": 905216,
+    "sha256": "200b3aad16245893baf5057201483e0b5a0f06870121054eda110eb0fd17910b"
+  },
+  "guard": {
+    "file": "xploader-install-guard",
+    "bytes": 81024,
+    "sha256": "fd54807fe1758f2be55159b34f4fcfad0af14b5922a34c193d046df98e17a5db"
+  },
+  "recovery": {
+    "url": "https://github.com/Sony-MSM8994-Dev/OTA/releases/download/archives/twrp-3.7.0_9-0-sumire.img",
+    "bytes": 25313280,
+    "sha256": "ef71a7abb84a5d0490610adb97f83316d59e2d62d9f4124bca2f6b9376912cae",
+    "image_fnv64": "aac3c08d87661ebb",
+    "kernel_raw_fnv64": "e52e8d928fb006bc"
+  },
+  "installation_validation": "See docs/VALIDATION.md and the release acceptance record"
+}

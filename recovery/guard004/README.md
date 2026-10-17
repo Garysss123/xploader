@@ -1,10 +1,10 @@
-# Optional protected SD TWRP (guard004)
+# xploader v1.0 optional protected SD TWRP
 
 This is an additional recovery-kernel defense for **E6653 with the tested xploader split29/44 layout**. It is optional: ordinary unmodified TWRP name-based ROM flashing also passed the split-layout tests. The guard does not create that layout.
 
 ## Get a usable `twrp.img`
 
-Download and extract **`xploader-twrp-guard004-kit.zip`** from the [preview release](https://github.com/Garysss123/xploader/releases/tag/native074-preview.1). Install Python 3 if necessary.
+Download and extract **`xploader-v1.0-protected-twrp-kit.zip`** from the [v1.0 release](https://github.com/Garysss123/xploader/releases/tag/v1.0). Install Python 3 if necessary.
 
 On Windows, double-click **`build-protected-twrp.cmd`**. On Linux/macOS, or from a terminal:
 
@@ -51,7 +51,7 @@ The exact kernel was tested in the lab: manager/FOTA/SD and raw MMC/RPMB writes 
 
 ## Source, license and rebuilding
 
-The recovery kernel is **GPL-2.0**, with upstream per-file notices retained. [COPYING](COPYING), the four modified source files in `overlay/`, the exact used `kernel.config`, and `manifest.json` are provided here. The complete modified source/configuration archive **`xploader-guard004-kernel-source.tar.gz`** is supplied in the same release as the binary kit.
+The recovery kernel is **GPL-2.0**, with upstream per-file notices retained. [COPYING](COPYING), the four modified source files in `overlay/`, the exact used `kernel.config`, and `manifest.json` are provided here. The complete modified source/configuration archive **`xploader-v1.0-protected-twrp-source.tar.gz`** is supplied in the same release as the binary kit. `guard004` is the internal source/build identifier.
 
 Upstream kernel: [Sony-MSM8994-Dev/android_kernel_sony_msm8994 at ced7acdc4d1bf7af8343b2aa715a1770cca961c1](https://github.com/Sony-MSM8994-Dev/android_kernel_sony_msm8994/tree/ced7acdc4d1bf7af8343b2aa715a1770cca961c1). The lab used the Android AArch64 GCC 4.9 toolchain (20150123). With the full source archive extracted, an appropriate Linux host and that compiler prefix:
 

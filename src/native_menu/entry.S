@@ -79,7 +79,13 @@ _start:
     str x16, [x14]
     add x12, x12, #24
     b 3b
-4:  mov x0, x9
+4:
+#if XPL_ENTRY_WATCHDOG
+    bl xpl_entry_watchdog_begin
+    cbnz w0, xpl_restore_state
+    adr x9, xpl_saved
+#endif
+    mov x0, x9
     adr x1, _start
     ldr x10, .Lstub_offset
     sub x1, x1, x10
@@ -165,6 +171,18 @@ xpl_exception:
     ldp x0, x1, [sp], #48
     eret
 .Lunexpected:
+#if XPL_ENTRY_WATCHDOG
+    /* After the early guard is ready, do not resume a possibly partial kernel.
+     * Before readiness, the carrier's stack-free fallback owns reset. */
+    adr x0, xpl_entry_wdt_ready
+    ldr w0, [x0]
+    cbz w0, .Lunguarded_unexpected
+    msr SPSel, #1
+    adr x10, xpl_stack_top
+    mov sp, x10
+    bl xpl_entry_watchdog_failstop
+.Lunguarded_unexpected:
+#endif
     /* Discard the C frames; the immutable original entry is the fallback.
      * No hardware/menu success is attributed to this recovery path. */
     mov x0, #0

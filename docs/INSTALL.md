@@ -1,70 +1,115 @@
-# Installing xploader
+# Installing xploader v1.0
 
-## Current package status
+Use an **unlocked Sony Xperia Z5 E6653**, an exFAT MicroSD and a Windows PC.
+Confirm the model from the phone's label; recovery model properties alone do
+not establish the physical variant. Other Z5 variants remain unverified.
 
-This is the **native074 developer source preview**. `releases/xploader-native074.bin` is the freestanding native core, **not** a boot image. Never pass that `.bin` to `fastboot flash`.
+The standalone installer has passed its real-phone **read-only** check and
+disk-image transaction tests. Its complete stock-restore/first-install round
+trip is still being tested. That remaining test is not marked passed here.
 
-A public self-contained boot-image package and a first-install layout migration tool are being prepared. The laboratory's original boot image is not included: it contains a donor Linux kernel/ramdisk and Magisk configuration. A public package must have clean contents, the correct carrier geometry and its kernel source/license materials. The instructions below describe the two installation routes; they are not a claim that a universal installer is already supplied.
+## Windows installer
 
-## Enter Sony fastboot
+1. Extract the complete v1.0 installer ZIP to a writable local folder.
+2. Power off. Hold **Volume Up** while connecting USB; the indicator should
+   turn blue. Ensure the Sony fastboot USB driver is installed.
+3. Run **`xploader-v1.0.exe`**. Python installation is unnecessary. Missing
+   Google Platform Tools and original sumire TWRP are downloaded directly from
+   their publishers and checked against fixed size/hash values.
+4. Read the detected device/layout and saved recovery-record path. Type
+   **INSTALL** to proceed. Keep USB connected while the tool preserves the OS
+   boot, installs the split layout and verifies a new SD TWRP boot.
+5. Keep the local `installer/work` record. A successful run saves **Always
+   Menu** and leaves the phone in original SD TWRP with screen timeout.
 
-Use an **unlocked E6653**. Power off, unplug USB, hold **Volume Up**, and connect USB to the PC. The indicator should turn blue. Install Android Platform Tools and the Sony fastboot USB driver if Windows does not detect the phone.
+From original TWRP 3.7 with root ADB, this is a read-only phone check:
 
-From a terminal in the Platform Tools folder:
+```text
+xploader-v1.0.exe --check
+```
+
+It does not reboot or write phone partitions/SD files; missing host tools can
+be downloaded. Source users with Python 3.10+ can run `Install-xploader.cmd`
+after supplying the release assets. A GitHub source ZIP alone lacks those
+binary assets. The standalone ZIP is assembled separately after validation.
+
+The installer records exact before/after windows, checks both GPT copies,
+retains the original Sony normal-boot GUID and refuses unknown layouts. Write
+order is OS copy, backup GPT, primary GPT, then manager. It does not write S1,
+TA/DRM, system, userdata or the SD partition table. A supported Sony ELF boot is
+repackaged with the same kernel, initrd and DTBs; a supported Android boot image
+is preserved. This preserves OS boot, not all personal data.
+
+## Persistent layout
+
+| Purpose | GPT name | Partition | Size |
+| --- | --- | --- | --- |
+| Sony normal-boot manager, original boot GUID retained | `xploader` | p29 | 32 MiB |
+| Replaceable eMMC OS boot | `boot` | p44 | 32 MiB |
+
+These extents occupy the original 64 MiB boot area; unrelated GPT entries are
+preserved. Ordinary Linux/TWRP installers using `boot` update the OS partition.
+**Never copy another phone's GPT.** An update to a supported split layout writes
+only the manager and preserves the separate OS boot.
+
+## Fastboot
+
+Enter blue-light fastboot from power-off with **Volume Up + USB**. With Android
+Platform Tools:
 
 ```text
 fastboot devices
 fastboot getvar product
 ```
 
-Confirm the phone is an **E6653**, using its model label and the known device/firmware identity before flashing. Some bootloader states report an unhelpful `Unknown` product value; that response alone does not establish a supported device or layout. Other Z5 models have not been accepted for installation.
+An `Unknown` product response alone is not model verification. The installer
+uses `fastboot boot` to start temporary original TWRP, then checks the layout
+before its bounded migration/write operations.
 
-## Stock-layout boot-image route
-
-Once a compatible, **flashable Android boot image** is available, the simple stock-layout command sequence is:
+For an advanced **stock-layout, SD-only trial**, a release's clean boot image
+can replace the original boot payload:
 
 ```text
 fastboot flash boot xploader.img
 fastboot reboot
 ```
 
-Here `xploader.img` means the packaged image for that release, not a renamed `.bin`, OS image or GitHub source ZIP. These commands replace the stock-layout boot payload. Preserve your existing boot image through recovery before replacing it if you want to restore that system. This source-preview repository currently supplies no image named `xploader.img`.
+This short route does **not** create the persistent split layout or preserve
+the original eMMC OS boot. Boot eMMC needs the split layout, and a later ROM
+flash can overwrite a stock-layout manager. Use the installer for a persistent
+installation. On an already split phone, do not assume fastboot's `boot` name
+selects the manager. Never flash a native-core `.bin`.
 
-**This route alone is not the ROM-flash-resistant setup.** It does not create a separate OS boot partition; the current separate-partition Boot eMMC path requires the split layout. SD boot and SD TWRP are the intended entry paths while configuring an SD-only trial. A later ordinary ROM flash to the original stock `boot` partition can overwrite the manager.
+## SD and menu
 
-For a compatible image that supports RAM boot, `fastboot boot xploader.img` can be used for a temporary trial instead. RAM boot does not install the manager or migrate the partition table. Do not assume every Sony firmware accepts an arbitrary image.
+Put original sumire recovery at **`/twrp.img`** and an adapted OS folder such as
+**`/lineageos19`** at the SD root. Choose it under
+`Service → Boot Settings → AD SD Dir`, then **Boot SD**. QuickBoot targets eMMC,
+the selected SD folder or TWRP; **Always Menu** restores the startup menu. Hold
+Power during startup to override QuickBoot, releasing it when the menu appears.
+Volume moves; short-press/release Power selects.
 
-## Tested persistent split layout
-
-| Purpose | Lab GPT name | Lab partition | Size |
-| --- | --- | --- | --- |
-| Sony normal-boot manager | `xploader` (original Sony boot GUID retained) | p29 | 32 MiB |
-| Replaceable eMMC OS boot | `boot` | p44 | 32 MiB |
-
-The laboratory migrated a measured original 64 MiB boot extent into these two extents, retained the original manager GUID and preserved every unrelated GPT entry. This requires device-specific inspection, OS boot relocation and verification of both GPT copies. **Do not copy another phone's GPT image.** The lab helper is intentionally bound to its original phone and is not distributed as a general installer.
-
-Sony S1's normal boot selection and its fastboot partition lookup must be distinguished from recovery's Linux `by-name` lookup. On an already migrated phone, do not assume `fastboot flash boot` updates the manager. The current verified laboratory update path writes and reads back the independently identified manager partition from root recovery. The public Windows tool will automate the correct route after layout detection.
-
-## Prepare the SD card and use the menu
-
-1. Use exFAT. Place a Z5-compatible TWRP image at the SD root as **`twrp.img`**.
-2. Extract an xploader-adapted OS folder at the root, for example **`/lineageos19`**. Keep its supplied `startup.txt` and companion image filenames.
-3. In xploader, use `Service → Boot Settings → AD SD Dir` to select it, then **Boot SD**.
-4. Use **TWRP** on the main menu to boot the root recovery image. Missing/invalid files produce an error page with Back; this does not download a recovery.
-5. Use **Always Menu** for a menu at each boot, or select a target under **QuickBoot**. Hold Power during startup to override QuickBoot, and release Power after the menu appears.
-
-To copy files while in xploader, use `Service → PC SD Access`. The current session lasts 180 seconds. Safely remove/eject the PC disk and wait until the loader finishes the session before booting an OS. Use a card reader or recovery MTP/ADB for transfers that exceed the current USB session window.
+`Service → PC SD Access` provides a bounded 180-second native USB mass-storage
+session. Eject/safely remove the PC disk and wait for the session to finish
+before booting an OS. Use recovery MTP/ADB or a card reader for longer transfers.
 
 ## Remove xploader / return to Sony stock firmware
 
-The intended removal route is **Flashtool in flashmode with a complete, matching E6653 stock firmware package**. A stock firmware flash can overwrite the custom manager, in the same general sense that a full stock ROM restore removes an aftermarket boot manager.
+Use **Flashtool in green-light flashmode** with a complete matching E6653 FTF
+covering the original partition layout, kernel, system and required firmware
+components. From power-off, hold **Volume Down** while connecting USB. Flashmode
+and blue-light fastboot use different Windows drivers.
 
-**Full Flashtool removal/restoration of this split layout has not been hardware-tested yet.** Flashtool supports Xperia firmware flashing ([upstream project](https://github.com/Androxyde/Flashtool)); that does not by itself prove a particular FTF bundle restores this phone's GPT. For the split layout, restoration must cover the original partition layout and matching stock boot/system components. A boot-only flash may remove the manager while leaving the split GPT behind. Do not advertise that as a complete stock restoration.
+The restoration test uses Flashtool **0.9.36.0** and
+**E6653_32.4.A.1.54_Customized_UK.ftf**. Its 32GB partition template matches the
+phone's original layout, including the 64 MiB boot area. **Physical stock
+boot/GPT/cold-boot acceptance is still pending.** A boot-only flash does not
+restore the partition layout.
 
-The release restoration guide must identify the exact firmware bundle, confirm its partition-table restoration behavior and verify stock cold boot before this route is marked accepted. Restoring stock Android is also separate from relocking the bootloader or recovering DRM/TA material. No relock is required or performed by xploader.
+Stock restoration can clear internal user data. Keep SD payloads and do not
+select SD formatting. Returning stock does not relock the bootloader or recover
+lost DRM/TA keys. No relock or DRM operation is part of xploader installation.
 
-## Other troubleshooting
-
-Keep the original Sony fastboot/flashmode access available. For a stock-layout trial, restore the original matching boot image through fastboot if needed. Split-layout restoration additionally requires reversing the layout migration; replacing one boot image does not merge GPT partitions. No restoration command for an unverified layout is provided here.
-
-If a payload hangs without ADB, physical reset may still be needed. Reset recovery for arbitrary hung payloads is not guaranteed. A PC firmware flasher may overwrite the persistent setup. See the README's exact ordinary-ROM flashing scope.
+A hung payload without USB can still need physical reset. Keep the local
+installer record; unknown or partially written states are refused rather than
+silently treated as a completed installation.

@@ -1,25 +1,51 @@
-# Building the native074 core
+# Building xploader v1.0
 
-Install a GNU AArch64 bare Linux cross compiler (`aarch64-linux-gnu-gcc`, binutils), a native C compiler and Python 3. Run from a Linux shell or WSL:
+Install a GNU AArch64 Linux cross compiler/binutils, native C compiler and
+Python 3.10+. From Linux or WSL:
 
 ```sh
 bash tools/build.sh
+python3 tools/build_image.py
 bash tools/check.sh
 ```
 
-`build/native074/menu.bin` and `menu.elf` are the results. `CROSS_COMPILE` selects another GNU prefix; `CC` may select the cross compiler explicitly. `XPL_EXTRA_CFLAGS` is available for a compiler sysroot/search paths. `HOST_CC` selects the native compiler used by tests/previews.
+Outputs are `build/v1.0/menu.bin` and `build/v1.0/xploader.img`. The carrier
+builder checks the pinned core, owned initrd, board hashes, geometry, entry
+branches and final accepted image hash; it preserves an existing output.
+`CROSS_COMPILE`, `CC` and `XPL_EXTRA_CFLAGS` select compiler/sysroot paths.
+GCC 13 reproduced the accepted 270,248-byte core. Windows and Linux Python
+both reproduced the accepted 905,216-byte image byte-for-byte.
 
-`config/native_menu_config.h` is the exact configuration from the accepted E6653 native074 core, with the measured carrier hook, 24 MiB staging geometry and original entry ABI. It is **not** a configuration for every Android boot image. Changing a compiler or configuration creates a new build needing its own hardware acceptance. `tools/verify_core.py` checks the frozen source and supplied binary, not an arbitrary rebuilt binary's hardware behavior.
+`releases/v1.0.json` binds exact source/config/core/image hashes. The internal
+source identifier remains native-menu-076; public release names use v1.0. A
+changed compiler/configuration needs its own acceptance. Host compilation is
+not a new hardware result.
 
-The native core expects a compatible Android boot-image carrier, firmware-provided display/device-tree state and the tested old AArch64 Image entry contract. A `.bin` is not a boot image. A universal carrier generator/first-install package is not included in this preview; see [installation status](INSTALL.md). The source tree deliberately excludes lab device credentials, ROM userdata images, research logs and phone-bound raw GPT writers.
+The carrier has no Linux kernel or donor recovery ramdisk. The two GPL board
+DTBs and their complete source correspondence are attributed under
+`vendor/sumire-board/`. Nonempty marker initrd/address geometry are measured
+Sony S1 entry requirements. Normal watchdog arm/restore was observed on
+hardware; forced early-failure reset controls remain a separate unpassed test.
 
-The frozen entry also requires a **non-empty firmware initrd** before display/menu initialization. A native-only candidate with no initrd did not return a recovery USB channel during a RAM test and is excluded from this release. A new carrier must satisfy every entry precondition and have a tested automatic recovery path before unattended hardware use.
+Installer source is under `installer/`. Its bounded helper is MIT source linked
+statically with musl 1.2.5; see `tools/build_installer_guard.sh` and dependency
+notices. It accepts a runtime captured device CID and the supported geometry,
+not a device-bound GPT. Host tests execute the C validator with ASAN/UBSAN and
+test interrupted transactions against synthetic windows.
+
+Use the pinned build requirements and `tools/build_installer.ps1` for the
+portable Windows application. Keep generated binaries, downloaded tools and
+local device work records out of the source commit. Binary assets are assembled
+separately after physical validation.
 
 ## Renderer previews
 
+With Pillow installed for the host Python:
+
 ```sh
-# Pillow must be available to python3.
 bash tools/render_gallery.sh
 ```
 
-This compiles and executes the **same frozen menu renderer** on the host, with representative menu state. Its PPM output is converted to PNG without retouching. It performs no phone I/O and does not establish hardware acceptance. Preview metadata and real OS capture provenance are recorded in `docs/images/provenance.json`.
+This executes the frozen renderer on representative states and converts PPM to
+PNG without retouching. It performs no phone I/O. Gallery provenance separates
+these previews and real device screenshots.

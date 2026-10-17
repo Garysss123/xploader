@@ -19,6 +19,13 @@
 #include "settings.h"
 #include "../payload/xpl_payload.h"
 #include "native_menu_config.h"
+#ifndef XPL_ENTRY_WATCHDOG
+#define XPL_ENTRY_WATCHDOG 0
+#endif
+#if XPL_ENTRY_WATCHDOG
+#include "entry_watchdog.h"
+static volatile uint8_t *entry_watchdog_proof;
+#endif
 #ifndef XPL_LAB_SERVICE_KIND
 #define XPL_LAB_SERVICE_KIND 0
 #define XPL_LAB_SERVICE_SEQUENCE 0
@@ -192,6 +199,9 @@ static uint64_t cells(const uint8_t *p,uint32_t n) {
 }
 /* Called only after the HAL validates the complete bounded FDT. */
 static volatile uint8_t *find_proof(const uint8_t *p,size_t n) {
+#if XPL_ENTRY_WATCHDOG
+    entry_watchdog_proof=0;
+#endif
     if(n<40)return 0;
     uint32_t pos=be32(p+8),end=pos+be32(p+36),strings=be32(p+12),sn=be32(p+32);
     unsigned depth=0,chosen=0;uint64_t initrd_start=0,initrd_end=0;
@@ -212,6 +222,10 @@ static volatile uint8_t *find_proof(const uint8_t *p,size_t n) {
             if(depth==chosen) {
                 if(len==4096 && same(p+strings+name,sn-name,"xploader,menu-proof"))
                     found=(volatile uint8_t *)(p+pos);
+#if XPL_ENTRY_WATCHDOG
+                else if(len==XPL_ENTRY_WDT_RECORD_BYTES && same(p+strings+name,sn-name,"xploader,entry-watchdog"))
+                    entry_watchdog_proof=(volatile uint8_t *)(p+pos);
+#endif
                 else if(same(p+strings+name,sn-name,"linux,initrd-start"))initrd_start=cells(p+pos,len);
                 else if(same(p+strings+name,sn-name,"linux,initrd-end"))initrd_end=cells(p+pos,len);
             }
@@ -543,6 +557,9 @@ static void record(void) {
         at=field(at,"proof_overflow",proof_overflow);
         (void)at;
     }
+#if XPL_ENTRY_WATCHDOG
+    if(entry_watchdog_proof)xpl_entry_watchdog_record(entry_watchdog_proof,XPL_ENTRY_WDT_RECORD_BYTES);
+#endif
     __asm__ volatile("dsb sy":::"memory");
 }
 static int io_read(void *unused,uint64_t address,uint32_t *value) {
@@ -1946,6 +1963,14 @@ void xpl_native_main(const struct xpl_entry_state *state,uintptr_t base) {
     struct native_work work={state,base};
     int e=xpl_icache_run(XPL_NATIVE_ICACHE,run_native_work,&work,&icache_diag);
     if(e==XPL_ICACHE_STATE)native_menu_run(state,base);
+#if XPL_ENTRY_WATCHDOG
+    if(kernel_replaced&&stage==7&&!result) {
+        if(xpl_entry_watchdog_finish(1)) {
+            if(proof)record();
+            xpl_entry_watchdog_failstop();
+        }
+    }
+#endif
     /* SD commit now owns a low-RAM FDT record; no old UTS stores occur. */
     if(proof)record();
 }

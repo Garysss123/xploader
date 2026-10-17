@@ -4,4 +4,8 @@ __pycache__/
 *.img
 *.cpio*
 *.log
+installer/work/
+installer/cache/
+installer/assets/xploader-install-guard
+platform-tools/
 !docs/images/*.png

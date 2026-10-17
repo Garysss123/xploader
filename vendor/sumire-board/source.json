@@ -1,0 +1,12 @@
+{
+  "license": "GPL-2.0; upstream per-file notices apply",
+  "kernel_git": "https://github.com/LineageOS/android_kernel_sony_msm8994",
+  "commit": "0dce90b262bb9e1393a685e59752ddd73e883cc1",
+  "source_archive": "sony-msm8994-board-source-0dce90b262bb9e1393a685e59752ddd73e883cc1.tar.gz",
+  "source_archive_sha256": "886ef503b7243ce234c35da5afbf6a0d0113aa4a42171b16e3da36f2c78584c9",
+  "dtbs": {
+    "board-0.dtb": "c5fa5e438d82c1c67a9be22dfa0f4d3173fb780f327c82ea6aadd4c5a7550d13",
+    "board-1.dtb": "ad857d55d9dc26b938de1836b59d8107230d2b44c5b8a16348eb08dd9f9c4d4e"
+  },
+  "byte_exact_source_rebuild": true
+}

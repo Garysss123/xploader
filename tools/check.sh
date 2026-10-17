@@ -19,3 +19,6 @@ done
 "${HOST_CC:-cc}" -std=c11 -O2 -Wno-misleading-indentation tests/test_settings_locale.c src/native_menu/settings.c build/tests/settings-v1.o -o build/tests/settings-locale
 build/tests/settings-locale
 python3 tools/verify_core.py
+"${HOST_CC:-cc}" -std=c11 -O1 -g -Wall -Wextra -Werror -Wno-misleading-indentation -fsanitize=address,undefined installer/guard.c -o build/tests/installer-guard
+XPL_HOST_GUARD="$root/build/tests/installer-guard" python3 tests/test_installer.py
+python3 tests/test_installer_device.py

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 task_root="$(cd -- "$(dirname -- "$0")/.." && pwd)"
-build="$task_root/build/native074"
+build="$task_root/build/v1.0"
 mkdir -p "$build"
 cp "$task_root/config/native_menu_config.h" "$build/native_menu_config.h"
 cross="${CROSS_COMPILE:-aarch64-linux-gnu-}"
@@ -15,6 +15,7 @@ read -r -a extra_flags <<< "${XPL_EXTRA_CFLAGS:-}"
  -I "$build" -Wl,--build-id=none,--no-dynamic-linker,-Bsymbolic,--gc-sections \
  -Wl,-T,"$task_root/src/native_menu/linker.ld",-Map,"$build/menu.map" \
  "$task_root/src/native_menu/entry.S" "$task_root/src/native_menu/main.c" "$task_root/src/native_menu/runtime.c" "$task_root/src/native_menu/bootargs.c" "$task_root/src/native_menu/dsi_window.c" "$task_root/src/native_menu/dsi_frame.c" "$task_root/src/native_menu/service_probe.c" "$task_root/src/native_menu/service_reset.c" "$task_root/src/native_menu/service_poweroff.c" "$task_root/src/native_menu/usb_power_probe.c" "$task_root/src/native_menu/usb_guard.c" "$task_root/src/native_menu/usb_control.c" "$task_root/src/native_menu/usb_enum.c" "$task_root/src/native_menu/usb_msd.c" \
+ "$task_root/src/native_menu/entry_watchdog.c" "$task_root/src/native_menu/entry_watchdog_runtime.c" \
  "$task_root"/src/native_hw/*.c "$task_root"/src/menu/*.c \
  "$task_root/src/sdhci/xpl_sd_board.c" "$task_root/src/sdhci/xpl_sd_probe.c" "$task_root/src/sdhci/xpl_sd_core_probe.c" "$task_root/src/sdhci/xpl_sd_mode_probe.c" "$task_root/src/sdhci/xpl_sd_powered.c" "$task_root/src/sdhci/xpl_sdhci.c" \
  "$task_root/src/storage/xpl_exfat.c" "$task_root/src/sdhci/xpl_emmc_probe.c" "$task_root/src/sdhci/xpl_emmc_read.c" "$task_root/src/sdhci/xpl_emmc_image.c" \
@@ -23,4 +24,6 @@ read -r -a extra_flags <<< "${XPL_EXTRA_CFLAGS:-}"
  -o "$build/menu.elf"
 "${cross}objcopy" -O binary "$build/menu.elf" "$build/menu.bin"
 "${cross}readelf" -h -r "$build/menu.elf" > "$build/menu-elf.txt"
+"$compiler" "${extra_flags[@]}" -nostdlib -c -DXPL_FALLBACK_SECONDS=20 "$task_root/src/native_carrier/fallback.S" -o "$build/fallback.o"
+"${cross}objcopy" -O binary "$build/fallback.o" "$build/fallback.bin"
 printf 'Native core built: %s\n' "$build/menu.bin"

@@ -15,6 +15,14 @@ This project uses one unlocked Sony Xperia Z5 E6653. These are separate kinds of
 | Reset / PowerOff | Reset return and user-confirmed physical power-off tested | Not a general recovery guarantee for every hung payload |
 | Stock restore | Planned matching E6653 full firmware + partition-layout restoration through Flashtool | Not yet hardware-validated |
 
-The public source is the frozen native074 core. Local export checks verify 83 source files and its 267,928-byte supplied native binary. Rebuilding the curated source with the lab's GCC13 toolchain reproduced that binary byte-for-byte. Host checks cover menu/controller/framebuffer equivalence against an independent older renderer, folder interaction, saved-settings torn writes/corruption and old/new settings compatibility. Host tests and renderer previews are not phone screenshots or substitute hardware boot tests.
+The public v1.0 source uses the frozen native-menu-076 core. GCC13 reproduced
+its 270,248-byte binary; Windows and Linux carrier builds reproduced the
+accepted 905,216-byte image. The installed image entered original SD TWRP and
+provided fresh source-bound normal entry/watchdog-restoration proof. Forced
+early-failure reset controls remain unpassed.
 
-The public first-install tool, self-contained flashable image, other Z5 variants, and XNU/UEFI/Windows CE/NT OS support are not accepted release capabilities in this source preview.
+The standalone Windows installer completed a real-phone read-only check,
+including its automatic pinned Google Platform Tools download. Host tests cover
+the actual C guard and transaction ordering/interruption. The physical stock
+restore and first-install round trip is pending. Other Z5 variants and
+XNU/UEFI/Windows CE/NT are not accepted release capabilities.
