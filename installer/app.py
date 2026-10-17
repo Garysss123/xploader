@@ -138,7 +138,7 @@ def set_settings(recovery, folder, mode, target, directory, state):
     remote = "/tmp/xploader-install-" + state["job_id"] + "-cfg.bin"
     recovery.push(local, remote)
     if exists:
-        recovery.shell("dd if=" + remote + " of=/external_sd/xploader.cfg bs=512 seek=" + str(1-active) + " count=1 conv=notrunc && sync")
+        recovery.shell("/sbin/toybox dd if=" + remote + " of=/external_sd/xploader.cfg bs=512 seek=" + str(1-active) + " count=1 conv=notrunc && sync")
     else:
         recovery.shell("cp " + remote + " /external_sd/xploader.cfg && sync")
     observed = recovery.binary("cat /external_sd/xploader.cfg", 1024)
@@ -183,9 +183,11 @@ def prepare_sd(recovery, folder, meta, state):
 
 def verify_recovery(recovery, plan, meta, before_id, folder, state):
     note("Starting xploader and SD TWRP. This can take about two minutes...")
-    p = recovery.call("reboot", timeout=15)
+    # Use recovery's System path so it completes its unmount/shutdown work.
+    # A bare adbd reboot failed the first SD handoff on the test phone.
+    p = recovery.call("shell", "twrp reboot system", timeout=15)
     if p.returncode:
-        raise RuntimeError("Normal restart was not acknowledged; saved job remains available")
+        raise RuntimeError("Recovery System restart was not acknowledged; saved job remains available")
     end = time.monotonic() + 240
     while True:
         try:
@@ -244,6 +246,7 @@ def verify_recovery(recovery, plan, meta, before_id, folder, state):
         if time.monotonic() > end:
             raise RuntimeError("Installation verified; recovery screen-off is still pending")
         time.sleep(3)
+    state.pop("error", None)
     state.update(accepted=True, AlwaysMenu_restored=True, screen_off_observed=True,
                  stock_Android_UI_tested=False, cold_power_cycle_tested=False, ordinary_ROM_flash_tested=False)
     save_state(folder, state)

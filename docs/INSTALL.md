@@ -4,9 +4,12 @@ Use an **unlocked Sony Xperia Z5 E6653**, an exFAT MicroSD and a Windows PC.
 Confirm the model from the phone's label; recovery model properties alone do
 not establish the physical variant. Other Z5 variants remain unverified.
 
-The standalone installer has passed its real-phone **read-only** check and
-disk-image transaction tests. Its complete stock-restore/first-install round
-trip is still being tested. That remaining test is not marked passed here.
+Full stock restoration has been verified. The standalone installer physically
+created the split layout and preserved the OS boot; a resumed run then verified
+fresh SD TWRP, both GPT copies and the complete boot windows, restored Always
+Menu and observed screen-off. The corrected app uses TWRP's orderly System
+restart. An uninterrupted first installation with this corrected app is still
+being tested and is not marked passed here.
 
 ## Windows installer
 
@@ -100,11 +103,20 @@ covering the original partition layout, kernel, system and required firmware
 components. From power-off, hold **Volume Down** while connecting USB. Flashmode
 and blue-light fastboot use different Windows drivers.
 
-The restoration test uses Flashtool **0.9.36.0** and
+The restoration test used Flashtool **0.9.36.0** and
 **E6653_32.4.A.1.54_Customized_UK.ftf**. Its 32GB partition template matches the
-phone's original layout, including the 64 MiB boot area. **Physical stock
-boot/GPT/cold-boot acceptance is still pending.** A boot-only flash does not
-restore the partition layout.
+phone's original layout, including the 64 MiB boot area. After the full flash,
+both GPT copies and all 43 original entries matched that template. With USB
+disconnected, a power-only startup entered Sony Android **7.1.1 / 32.4.A.1.54**
+directly, without xploader; stock UI and ADB were verified. A boot-only flash
+does not restore the partition layout.
+
+The test phone has a pre-existing `Unknown` TA model string. The ordinary GUI
+rejected that identity. The successful test used the unmodified official
+Flashtool engine through a private, device-bound API wrapper with a temporary
+model alias. Firmware signatures, hardware matching and TA contents were not
+changed. This validates full restoration on this phone; it does not validate a
+generic GUI workaround for every device reporting `Unknown`.
 
 Stock restoration can clear internal user data. Keep SD payloads and do not
 select SD formatting. Returning stock does not relock the bootloader or recover

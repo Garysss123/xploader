@@ -78,7 +78,7 @@ On the test E6653, unmodified TWRP kernel/complete-ROM installation, system/data
 
 An optional **v1.0 protected SD TWRP kit** is available for that exact E6653 split layout. It builds `/twrp.img` using the original publisher's TWRP userspace and the tested recovery guard kernel, with the source SD mounted read-only. See [download, build and usage instructions](recovery/guard004/README.md). Keep a stock recovery copy when you need writable SD access.
 
-Removal is intended to use a complete matching Sony stock firmware restore through Flashtool. **The full Flashtool/GPT restoration path is not yet hardware-validated**; see the [removal notes](docs/INSTALL.md#remove-xploader--return-to-sony-stock-firmware). Ordinary recovery-flash survival is the tested scope, rather than an unbrickable-phone claim or a claim of greater durability than MAGLDR.
+A complete matching Sony stock firmware restore through Flashtool **removed xploader on the test E6653**: the original partition table was read back, and the phone booted directly into Sony Android 7.1.1. The bootloader remained unlocked. See the [removal notes and tested procedure](docs/INSTALL.md#remove-xploader--return-to-sony-stock-firmware), including the lab device's model-identification limitation. Ordinary recovery-flash survival is the tested scope; raw partition writes and complete stock restoration can remove the manager.
 
 ## Build and inspect
 
