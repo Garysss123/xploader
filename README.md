@@ -62,13 +62,13 @@ Both an Android v0 `boot.img` and separate kernel/initrd/DTB files are supported
 
 | Test system | Demonstrated on E6653 | SD test image download |
 | --- | --- | --- |
-| LineageOS 19.1 / Android 12 | Complete SD boot and Android UI; switching with other SD profiles | Link to be added |
-| postmarketOS v25.12 / Xfce | SD Linux desktop; physical touch and window interaction; repeat boot | Link to be added |
-| Sailfish OS 4.6.0.13 | SD systemd userspace, original Lipstick UI and physical touch/unlock | Link to be added |
+| LineageOS 19.1 / Android 12 | Complete SD boot and Android UI; switching with other SD profiles | [Download .rar](https://www.dropbox.com/scl/fi/q1sye9fhrkijhsscv2gz7/lineageos19.rar?rlkey=x1rkmf1few4gbafn3ov5tyej6&st=j7ot2tc5&dl=0) |
+| postmarketOS v25.12 / Xfce | SD Linux desktop; physical touch and window interaction; repeat boot | [Download .rar](https://www.dropbox.com/scl/fi/t23izscezydtddu45qqra/postmarketos.rar?rlkey=opplk4awgk7jgdonqq0ykrbn4&st=rxk91igz&dl=0) |
+| Sailfish OS 4.6.0.13 | SD systemd userspace, original Lipstick UI and physical touch/unlock | [Download .rar](https://www.dropbox.com/scl/fi/us31v1e8mxe7tal3u1a4d/sailfishos.rar?rlkey=pbgqy814u9nqh5r84rbosuuh0&st=9kwi85tn&dl=0) |
 
 <img src="docs/images/lineageos19-home.png" width="250" alt="Real LineageOS 19.1 screenshot"> <img src="docs/images/postmarketos-desktop.png" width="250" alt="Real postmarketOS Xfce screenshot"> <img src="docs/images/sailfishos-apps.png" width="250" alt="Real Sailfish OS screenshot">
 
-The images above are demonstrations of separate OS ports. xploader is the boot manager. These community ports are not official releases from Sony, LineageOS, postmarketOS or Jolla. Download links will be filled in separately; this repository does not contain OS data images or device credentials.
+The images above are demonstrations of separate OS ports. xploader is the boot manager. These community ports are not official releases from Sony, LineageOS, postmarketOS or Jolla. The SD test archives are linked above; this repository does not contain OS data images or device credentials.
 
 ## Surviving ordinary ROM flashing
 
