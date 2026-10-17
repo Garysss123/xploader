@@ -1,6 +1,6 @@
 # SD payloads
 
-The native074 loader reads exFAT and a small `startup.txt` in the selected folder. The supplied examples describe the current profiles; they do not contain kernels or complete OS images.
+The xploader v1.0 loader reads exFAT and a small `startup.txt` in the selected folder. The supplied examples describe the current profiles; they do not contain kernels or complete OS images.
 
 ## Combined Android image
 

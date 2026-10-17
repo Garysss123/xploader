@@ -26,3 +26,11 @@ The v1.0 native-only carrier contains the native core, a tiny owned marker initr
 The installer helper is MIT licensed and statically linked with musl 1.2.5; its notice is in `installer/licenses/musl-COPYRIGHT.txt`. The helper also links GCC soft-float runtime code under GPL-3 with the GCC Runtime Library Exception 3.1; its complete notice and license accompany the package. The portable Windows executable includes Python under its PSF license, OpenSSL 3.0.18 with its Apache-2.0 license and notice, and the PyInstaller bootloader under its GPL exception for bundled applications. Platform Tools and original TWRP are downloaded directly from their publishers; their licenses remain separate. Local installer work records contain device identity and boot/GPT recovery material and are excluded from publication.
 
 The optional TWRP kit distributes the modified GPL recovery kernel with its complete modified kernel source/configuration. Its host builder fetches the unchanged original recovery image directly from the original publisher and performs the documented fstab/kernel changes locally. Original TWRP userspace/vendor binaries are not bundled in the kit; they retain their own licenses. The builder itself is MIT licensed. See [guard004](recovery/guard004/README.md) for source and usage.
+
+The Windows installer creates its temporary RAM installation environment locally
+from the hash-checked publisher recovery. It adds explicit recovery boot mode
+and changes only `twres/portrait.xml` in the ramdisk to show an automatic
+xploader Installer screen. The kernel, DTBs, userspace executables and init
+scripts remain unchanged. TeamWin attribution is retained. The modified theme
+builder is published in `installer/recovery_boot.py`; the original SD
+`/twrp.img` is not replaced with the installer-themed image.

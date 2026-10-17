@@ -17,19 +17,29 @@ import uuid
 
 RESOURCES = Path(sys._MEIPASS) if getattr(sys, "frozen", False) else Path(__file__).resolve().parents[1]
 ROOT = Path(sys.executable).resolve().parent if getattr(sys, "frozen", False) else RESOURCES
+SESSION = None
 sys.path.insert(0, str(RESOURCES))
 from installer.device import Recovery, GuardBackend, tool, devices, run, fetch, frame
 from installer.layout import inspect, BOOT_START, OS_START, DISK_SECTORS, PRIMARY_BYTES, BACKUP_BYTES
 from installer.plan import prepare, store, load, execute, validate_resume, HALF_BYTES
 from tools.xpl_settings import choose, encode
 from installer.bootstrap import ensure_platform_tools
+from installer.recovery_boot import prepare as prepare_installer_recovery
 
 
 def sha(data):
     return hashlib.sha256(data).hexdigest()
 
 
+def diagnostic(event, **values):
+    if SESSION is not None:
+        with (SESSION / "session.jsonl").open("a", encoding="utf-8") as output:
+            output.write(json.dumps(dict(time_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                                         event=event, **values)) + "\n")
+
+
 def note(message):
+    diagnostic("message", message=message)
     print(message, flush=True)
 
 
@@ -48,7 +58,7 @@ def release():
 
 def get_recovery(meta):
     row = meta["recovery"]
-    note("Preparing the original TWRP recovery from its publisher...")
+    note("Preparing installer components from their publisher...")
     return fetch(row["url"], ROOT / "installer/cache/twrp-3.7.0_9-0-sumire.img", row["sha256"], row["bytes"])
 
 
@@ -94,19 +104,34 @@ def connected(adb, fastboot, serial, meta, check):
     if not (re.search(r"(?m)^product: E6653\s*$", product) or
             re.search(r"(?m)^product: Unknown: Sep 20 2017/12:00:48\s*$", product)):
         raise RuntimeError("Fastboot product identity is unsupported")
-    image = get_recovery(meta)
-    note("Starting temporary TWRP. No partition has been flashed...")
+    image, bootstrap = prepare_installer_recovery(get_recovery(meta), ROOT / "installer/cache", meta["recovery"])
+    diagnostic("temporary-installer-built", **bootstrap)
+    note("Starting the temporary xploader installation environment. No partition has been flashed...")
     p = run(fastboot, "-s", serial, "boot", str(image), timeout=45)
+    diagnostic("temporary-recovery-boot-command", returncode=p.returncode,
+               stdout=p.stdout.decode(errors="replace"), stderr=p.stderr.decode(errors="replace"))
     if p.returncode:
         raise RuntimeError("Temporary recovery boot failed: " + (p.stdout+p.stderr).decode(errors="replace"))
-    end = time.monotonic() + 180
+    note("RAM image transfer/boot acknowledged. Waiting for the installation environment, up to 180 seconds...")
+    started = time.monotonic()
+    end = started + 180
+    last_notice = -10
+    last_error = "Recovery ADB has not appeared"
     while True:
+        elapsed = int(time.monotonic() - started)
+        if elapsed - last_notice >= 10:
+            note(f"Preparing phone: {elapsed}/180 seconds. No partition has been flashed.")
+            last_notice = elapsed
         try:
             recovery.identity()
+            diagnostic("temporary-recovery-ready", elapsed_seconds=time.monotonic()-started)
             return recovery
-        except (RuntimeError, ValueError):
+        except (RuntimeError, ValueError, __import__("subprocess").TimeoutExpired) as error:
+            last_error = str(error)
             if time.monotonic() > end:
-                raise RuntimeError("Recovery did not appear. No partition was flashed; a physical reset may be needed")
+                diagnostic("temporary-recovery-timeout", elapsed_seconds=time.monotonic()-started,
+                           last_identity_error=last_error)
+                raise RuntimeError("Installation environment did not start. No partition was flashed; a physical reset may be needed")
             time.sleep(3)
 
 
@@ -188,8 +213,14 @@ def verify_recovery(recovery, plan, meta, before_id, folder, state):
     p = recovery.call("shell", "twrp reboot system", timeout=15)
     if p.returncode:
         raise RuntimeError("Recovery System restart was not acknowledged; saved job remains available")
-    end = time.monotonic() + 240
+    started = time.monotonic()
+    end = started + 240
+    last_notice = -10
     while True:
+        elapsed = int(time.monotonic() - started)
+        if elapsed - last_notice >= 10:
+            note(f"Waiting for installed xploader and new SD TWRP: {elapsed}/240 seconds...")
+            last_notice = elapsed
         try:
             identity = recovery.identity()
             if identity["boot_id"] != before_id:
@@ -253,6 +284,7 @@ def verify_recovery(recovery, plan, meta, before_id, folder, state):
 
 
 def main():
+    global SESSION
     if getattr(sys, "frozen", False) and len(sys.argv) == 1:
         sys.argv.append("--apply")
     parser = argparse.ArgumentParser(description=__doc__)
@@ -266,7 +298,18 @@ def main():
     args = parser.parse_args()
     if args.check == args.apply:
         parser.error("Choose --check or --apply")
+    SESSION = ROOT / "installer/logs" / (datetime.datetime.now().strftime("%Y%m%d-%H%M%S-") + uuid.uuid4().hex[:12])
+    SESSION.mkdir(parents=True, exist_ok=False)
+    note("Diagnostic log: " + str(SESSION / "session.jsonl"))
     meta, assets = release()
+    note("xploader " + meta["release"] + " E6653 installer - unlocked Xperia Z5 only")
+    if args.apply:
+        note("INSTALL starts automatic device checks, OS-boot preservation, split-layout setup and verification.")
+        if not args.yes and input("Type INSTALL to continue: ").strip() != "INSTALL":
+            diagnostic("cancelled-before-device-preparation")
+            note("Cancelled before device preparation.")
+            return
+        diagnostic("installation-confirmed", confirmation="--yes" if args.yes else "typed INSTALL")
     if not args.adb and not args.fastboot:
         try:
             adb, fastboot = tool("adb"), tool("fastboot")
@@ -276,10 +319,14 @@ def main():
             adb, fastboot = tool("adb"), tool("fastboot")
     else:
         adb, fastboot = tool("adb", args.adb), tool("fastboot", args.fastboot)
-    note("xploader " + meta["release"] + " E6653 installer - unlocked Xperia Z5 only")
+    note("Detecting the connected phone...")
     recovery = connected(adb, fastboot, args.serial, meta, args.check)
     identity = recovery.identity()
     note("Connected: " + identity["model"] + " / " + identity["serial"])
+    if args.apply:
+        note("Checking the installation environment before any partition write...")
+        response = recovery.shell("twrp get tw_is_encrypted", timeout=20)
+        diagnostic("recovery-command-interface-ready", response=response)
     primary, backup, manager_region, os_region = read_windows(recovery)
     sd = recovery.sd(allow_mount=args.apply)
     root = ROOT / "installer/work"
@@ -304,9 +351,6 @@ def main():
     note("Saved recovery record: " + str(folder))
     if args.check:
         note("CHECK PASSED. No partition or SD file was written; no restart requested.")
-        return
-    if not args.yes and input("Type INSTALL to continue: ").strip() != "INSTALL":
-        note("Cancelled before any write.")
         return
     def event(row):
         with (folder / "events.jsonl").open("a", encoding="utf-8") as output:
@@ -346,7 +390,10 @@ if __name__ == "__main__":
     try:
         main()
     except Exception as error:
+        diagnostic("stopped", error_type=type(error).__name__, error=str(error))
         print("STOPPED: " + str(error), file=sys.stderr, flush=True)
+        if SESSION is not None:
+            print("Diagnostic log: " + str(SESSION / "session.jsonl"), file=sys.stderr, flush=True)
         status = 1
     if interactive:
         input("Press Enter to close...")

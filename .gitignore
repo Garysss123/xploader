@@ -5,6 +5,7 @@ __pycache__/
 *.cpio*
 *.log
 installer/work/
+installer/logs/
 installer/cache/
 installer/assets/xploader-install-guard
 platform-tools/

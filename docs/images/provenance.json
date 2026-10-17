@@ -258,5 +258,18 @@
     ],
     "physical_device_screenshot": false,
     "notes": "Actual frozen renderer with representative menu state; not a hardware capture."
+  },
+  {
+    "file": "installer-screen.png",
+    "kind": "physical_device_screenshot",
+    "system": "Temporary xploader Installer environment",
+    "device": "Sony Xperia Z5 E6653",
+    "sha256": "fe8fbea14b1c768835cc05dc4fb5d0cd9f9994d97cd1f437b3652de8b64765c8",
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "pixel_content_modified": false,
+    "notes": "Actual framebuffer capture of installer theme running in temporary recovery RAM. This image records the UI; cold-start and installation acceptance were separately verified."
   }
 ]

@@ -33,6 +33,16 @@ eMMC LineageOS 19.1 through automatic fastboot, original temporary TWRP and
 source-bound SD TWRP. It preserved the eMMC OS boot, restored Always Menu and
 observed screen-off. Its manager bytes were already equal, so that update
 required no manager write; the earlier first-install writes are a separate test.
-An uninterrupted first installation with the corrected app remains pending.
+A later cold-fastboot operator test used the one-prompt Windows app and its
+locally generated installer screen. It reached root recovery in about 13 seconds,
+then completed actual first-install writes from the restored stock GPT and a
+fresh source-bound SD TWRP boot. Both GPT copies and complete manager/OS boot
+windows matched; Always Menu was saved and read back. The operator restarted
+during the final screen-off wait, so that particular session stopped and is not
+claimed as an uninterrupted `SUCCESS`. The same one-prompt app was then run
+again by the operator from fastboot and completed the entire updater cycle:
+source-bound SD recovery, full GPT/boot readback, saved Always Menu and observed
+screen-off, ending with `SUCCESS`. Its already-equal manager needed no rewrite. The app keeps early diagnostic logs and reports
+elapsed waiting times; it does not require manual TWRP navigation.
 Host tests cover the actual C guard and transaction ordering/interruption.
 Other Z5 variants and XNU/UEFI/Windows CE/NT are not accepted release capabilities.

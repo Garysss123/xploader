@@ -14,7 +14,9 @@ xploader provides an on-device boot menu, SD folder multiboot and SD recovery bo
 
 Public downloads use **v1.0**, with future public versions planned within the **v1.0–v1.13** series. See [versioning](docs/VERSIONING.md). Internal build numbers remain in source/validation manifests for traceability.
 
-The [v1.0 release](https://github.com/Garysss123/xploader/releases/tag/v1.0) provides the native source/core, optional protected TWRP kit and corresponding source. The standalone installer is undergoing a real stock-restore/first-install round trip; it is not an accepted public installation capability until that validation is recorded. The original SD recovery is [TWRP 3.7.0_9-0 for sumire](https://github.com/Sony-MSM8994-Dev/OTA/releases/download/archives/twrp-3.7.0_9-0-sumire.img), obtained directly from its publisher.
+Download **[xploader-v1.0-windows.zip](https://github.com/Garysss123/xploader/releases/download/v1.0/xploader-v1.0-windows.zip)** for the ready-to-run Windows installer/updater. It requires an unlocked **E6653** and an **exFAT MicroSD**. Open the app, type **INSTALL**, and leave USB connected until **SUCCESS**. Temporary installation, the split layout and SD recovery verification run automatically; no manual TWRP installation is needed. See the [installation steps](docs/INSTALL.md) and [test boundaries](docs/VALIDATION.md).
+
+The [v1.0 release](https://github.com/Garysss123/xploader/releases/tag/v1.0) also provides the flashable image for the documented advanced workflow, native core, optional protected SD TWRP kit and corresponding sources. The native core `.bin` is for developers; it must not be flashed as a boot image. The installer downloads [original TWRP 3.7.0_9-0 for sumire](https://github.com/Sony-MSM8994-Dev/OTA/releases/download/archives/twrp-3.7.0_9-0-sumire.img) directly from its publisher and preserves that original image for SD recovery.
 
 ## Features
 
@@ -74,7 +76,7 @@ The tested persistent layout keeps the original Sony boot GUID on a 32 MiB **xpl
 
 On the test E6653, unmodified TWRP kernel/complete-ROM installation, system/data/cache clearing, a damaged OS boot image, and a cable-disconnected cold boot were tested with the manager surviving. SD TWRP remained available. This does **not** mean every possible ZIP or raw partition command is safe: rewriting the manager/GPT, restoring stock firmware with a PC flasher, or formatting the SD can remove the manager or its payloads. A protected recovery is an optional additional layer, not a requirement for the ordinary name-based test cases.
 
-**Flashing a boot image alone does not create this layout.** The v1.0 installer detects the layout and preserves the existing OS boot before migrating it. Its real first-install acceptance is still pending. [Installation notes](docs/INSTALL.md) explain the difference.
+**Flashing a boot image alone does not create this layout.** The v1.0 installer detects the layout and preserves the existing OS boot before migrating it. Real stock-layout migration and subsequent source-bound SD recovery boot were tested. [Installation notes](docs/INSTALL.md) explain the difference.
 
 An optional **v1.0 protected SD TWRP kit** is available for that exact E6653 split layout. It builds `/twrp.img` using the original publisher's TWRP userspace and the tested recovery guard kernel, with the source SD mounted read-only. See [download, build and usage instructions](recovery/guard004/README.md). Keep a stock recovery copy when you need writable SD access.
 
@@ -94,8 +96,8 @@ To regenerate loader previews, install Pillow for your host Python and run `bash
 
 ## Future plans
 
-- A simple **Windows PC installer/updater**, similar in convenience to MAGLDR's PC installation workflow: detect the phone and layout, prepare the split boot layout, preserve the existing OS boot image, install/update the manager, and provide a recovery path.
-- Simpler public first-install packaging and validation on additional E6653 firmware revisions, followed by other Z5 variants where hardware is available.
+- Further improvements to the **Windows PC installer/updater**, progress reporting and recovery workflow.
+- Validation on additional E6653 firmware revisions, followed by other Z5 variants where hardware is available.
 - Faster SD loading and decompression; longer USB SD transfer sessions.
 - Automatic recovery covering failures at the carrier entry as well as within an OS payload.
 - Better postmarketOS/Sailfish platform services, power and thermal behavior.

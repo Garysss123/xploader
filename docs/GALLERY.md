@@ -99,3 +99,12 @@ Original Lipstick screenshot from the physical E6653. App icons do not imply the
 Original Fingerterm About page captured by Lipstick on the physical E6653.
 
 Hashes, capture types and dimensions: [provenance.json](images/provenance.json).
+
+## Automatic installation environment
+
+<img src="images/installer-screen.png" width="270" alt="Temporary xploader Installer phone screen">
+
+Actual E6653 framebuffer screenshot of the installer-only theme in temporary
+recovery RAM. The original recovery executables and kernel remain unchanged;
+the original SD TWRP interface is used for the later boot verification. This
+screenshot shows the interface, not a substitute for installation readback.
