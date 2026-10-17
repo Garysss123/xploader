@@ -28,6 +28,11 @@ order, with exact readback. The first bare ADB restart failed to load SD; two
 proper TWRP System restarts then passed, followed by a successful standalone
 resume using that path. Resume verified fresh source-bound SD TWRP, both GPT
 copies and complete boot windows, restored Always Menu and observed screen-off.
+The corrected standalone app subsequently completed a fresh updater run from
+eMMC LineageOS 19.1 through automatic fastboot, original temporary TWRP and
+source-bound SD TWRP. It preserved the eMMC OS boot, restored Always Menu and
+observed screen-off. Its manager bytes were already equal, so that update
+required no manager write; the earlier first-install writes are a separate test.
 An uninterrupted first installation with the corrected app remains pending.
 Host tests cover the actual C guard and transaction ordering/interruption.
 Other Z5 variants and XNU/UEFI/Windows CE/NT are not accepted release capabilities.

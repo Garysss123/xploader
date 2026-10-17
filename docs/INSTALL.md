@@ -8,8 +8,10 @@ Full stock restoration has been verified. The standalone installer physically
 created the split layout and preserved the OS boot; a resumed run then verified
 fresh SD TWRP, both GPT copies and the complete boot windows, restored Always
 Menu and observed screen-off. The corrected app uses TWRP's orderly System
-restart. An uninterrupted first installation with this corrected app is still
-being tested and is not marked passed here.
+restart. A complete update from eMMC LineageOS 19.1 also passed automatic
+fastboot, temporary TWRP and fresh SD TWRP verification. An uninterrupted first
+installation with this corrected app is still being tested and is not marked
+passed here.
 
 ## Windows installer
 
@@ -114,9 +116,10 @@ does not restore the partition layout.
 The test phone has a pre-existing `Unknown` TA model string. The ordinary GUI
 rejected that identity. The successful test used the unmodified official
 Flashtool engine through a private, device-bound API wrapper with a temporary
-model alias. Firmware signatures, hardware matching and TA contents were not
-changed. This validates full restoration on this phone; it does not validate a
-generic GUI workaround for every device reporting `Unknown`.
+model alias. The alias did not alter the FTF/SIN bytes, signature checks,
+hardware matching or TA model string. This validates full restoration on this
+phone; it does not validate a generic GUI workaround for every device reporting
+`Unknown`.
 
 Stock restoration can clear internal user data. Keep SD payloads and do not
 select SD formatting. Returning stock does not relock the bootloader or recover
